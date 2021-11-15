@@ -1,6 +1,10 @@
-import { Link } from 'react-router-dom'
-import React from 'react'
-import styled from 'styled-components'
+import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { axiosWithAuth } from '../utils/axiosWithAuth';
+// import { useHistory } from 'react-router';
+import Potluck from './Potluck';
+import EditForm from './EditForm';
 
 const EventDisplay = () => {
 
@@ -10,6 +14,38 @@ const EventDisplay = () => {
     //I'll come back for this and try when I know the API to send/receive from. 
     //For now, I'm just placing the page component and the options to create new event/sign up for one.
     //-Matt
+
+    // const { push } = useHistory();
+    const [potlucks, setPotlucks] = useState([]);
+    const [editing, setEditing] = useState(false);
+    const [editId, setEditId] = useState();
+
+    useEffect(() => {
+        axiosWithAuth()
+        .get("/event-display")
+        .then((res) => setPotlucks(res.data))
+        .catch((err) => console.log(err))
+    }, []);
+
+    const handleEditSelect = (id)=> {
+        setEditing(true);
+        setEditId(id);
+        // push(`/event-display/${id}`)
+    }
+
+    const handleDelete = (id) => {
+        axiosWithAuth()
+            .delete(`/event-display/${id}`)
+            .then(res=> {
+                // push('/event-display')
+            })
+            .catch(err=> console.log(err))
+    }
+
+    const handleEdit = (potluck) => {
+
+        setEditing(false);
+    }
 
     return (
 
@@ -29,7 +65,15 @@ const EventDisplay = () => {
             <EventShowDiv>
                 <CreatedEvents>
                     <h2>Events I have created:</h2>
-                    <EventDiv></EventDiv>
+                    <EventDiv>
+                        {potlucks.map(potluck => {
+                            return <Potluck key={potluck.id} potluck={potluck} handleEditSelect={handleEditSelect} handleDelete={handleDelete}/>
+                        })}
+
+                        {
+                        editing && <EditForm editId={editId} handleEdit={handleEdit}/>
+                        }
+                    </EventDiv>
                 </CreatedEvents>
                 <SignedUpEvents>
                     <h2>Events I am attending:</h2>

@@ -1,10 +1,38 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { axiosWithAuth } from '../utils/axiosWithAuth';
+
+const initialPotluck = {
+    id:"",
+    date: "",
+    time: "",
+    location: "",
+    food1: "",
+    food2: "",
+    food3: "",
+};
 
 const CreateEvent = (props) => {
 
-    const { date, location, time, food1, food2, food3, food4, food5, food6, food7, food8, food9, food10, timeampm } = props  
+    const [potluck, setPotluck]  = useState(initialPotluck);
+    const handleChange = (e)=> {
+        setPotluck({
+            ...potluck,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const handleSubmit = (e) => {
+        potluck.id = Date.now();
+        e.preventDefault();
+        axiosWithAuth()
+        .post(`/potluck/${potluck.id}`, potluck)
+        .then(res=> {
+            console.log(res)
+        })
+        .catch(err=> console.log(err))
+    }
+
 
     return(
 
@@ -12,21 +40,14 @@ const CreateEvent = (props) => {
             <h1>Please enter details about the potluck!</h1>
             <FormDiv>
                 <form id="new-potluck">
-                    <p>Date: <input id="date" name="date" type = "text" value={date} /></p>
-                    <p>Location: <input id="location" name="location" type = "text" value={location} /></p>
-                    <p>Time: <input id="time" name="time" type = "text" value={time} /> AM <input id="am" name="am" type="radio" value={timeampm} /> PM <input id="pm" name="pm" type="radio" value={timeampm} /></p>
+                    <p>Date: <input id="date" name="date" type = "text" value={potluck.date} onChange={handleChange}/></p>
+                    <p>Location: <input id="location" name="location" type = "text" value={potluck.location} onChange={handleChange}/></p>
+                    <p>Time: <input id="time" name="time" type = "text" value={potluck.time} onChange={handleChange}/></p>
                     <h4>Foods: </h4>
-                    <input id="food1" name="food1" type = "text" value={food1} /><br/>
-                    <input id="food2" name="food2" type = "text" value={food2} /><br/>
-                    <input id="food3" name="food3" type = "text" value={food3} /><br/>
-                    <input id="food4" name="food4" type = "text" value={food4} /><br/>
-                    <input id="food5" name="food5" type = "text" value={food5} /><br/>
-                    <input id="food6" name="food6" type = "text" value={food6} /><br/>
-                    <input id="food7" name="food7" type = "text" value={food7} /><br/>
-                    <input id="food8" name="food8" type = "text" value={food8} /><br/>
-                    <input id="food9" name="food9" type = "text" value={food9} /><br/>
-                    <input id="food10" name="food10" type = "text" value={food10} /><br/>
-                    <p><Link to ="/event-display"><button>Create Event!</button></Link></p>
+                    <input id="food1" name="food1" type = "text" value={potluck.food1} onChange={handleChange}/><br/>
+                    <input id="food2" name="food2" type = "text" value={potluck.food2} onChange={handleChange}/><br/>
+                    <input id="food3" name="food3" type = "text" value={potluck.food3} onChange={handleChange}/><br/>
+                    <button onClick={handleSubmit}>Create Event!</button>
                 </form>
             </FormDiv>
         </BodyDiv>

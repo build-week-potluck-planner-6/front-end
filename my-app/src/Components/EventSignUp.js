@@ -6,9 +6,6 @@ const EventSignUp = (props) => {
 
     const { eventID } = props
 
-    //This is just the form currently, needs to have the event id added to the user when submit is clicked. 
-    //I have not added this yet, I'll need to look more into how to do that as it's a weak point.
-
     return(
 
         <BodyDiv>
@@ -17,7 +14,7 @@ const EventSignUp = (props) => {
                 <form id = 'event-ID'>
                     Id number: 
                     <input id = "eventID" name = "eventID" type = "text"  value = {eventID} />
-                    <Link to = {`event-display`}><button>Submit</button></Link>
+                    <Link to = {`/event-display/${eventID}`}><button>Submit</button></Link>
                 </form>
             </FormDiv>
         </BodyDiv>
