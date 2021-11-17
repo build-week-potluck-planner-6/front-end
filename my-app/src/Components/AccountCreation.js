@@ -1,19 +1,29 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+// import { useNavigate } from 'react-router';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+const initialValues = { username: "", password: "" };
 
 const AccountCreation = (props) => {
+    // const navigate = useNavigate();
+    const [formValues, setFormValues] = useState(initialValues);
 
-    const { userName, password, submit, change } = props
-
-    const onSubmit = evt => {
-        evt.preventDefault()
-        submit()
+    const onSubmit = e => {
+        e.preventDefault()
+        axios
+        .post("http://localhost:3000/login", formValues)
+        .then((res) => {
+            window.localStorage.setItem('token', res.data.token);
+            // navigate("/event-display");
+        })
+        .catch((err)=> console.log(err));
     }
 
-    const onChange = evt => {
-        const { userName , password } = evt.target
-        change( userName, password )
+    const handleChanges = e => {
+        setFormValues({ ...formValues, [e.target.name]: e.target.value,
+        });
     }
     
     return(
@@ -25,11 +35,11 @@ const AccountCreation = (props) => {
                     <form id = "creation-form" onSubmit = {onSubmit}>
                         <label>
                             <h3>Username: </h3>
-                            <input id = "userName" name = "userName" type = "text" onChange = {onChange} value = {userName} />
+                            <input id='username' name='username' value={formValues.username} onChange={handleChanges}/>
                         </label>
                         <label>
                             <h3>Password: </h3>
-                            <input id = "password" name = "password" type = "text" onChange = {onChange} value = {password} />
+                            <input id='password' name='password' type='password' value={formValues.password} onChange={handleChanges}/>
                         </label>
                         <br/>
                         <br/>

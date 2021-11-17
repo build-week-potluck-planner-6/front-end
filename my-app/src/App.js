@@ -1,18 +1,15 @@
-import { useState } from 'react'
-import './App.css'
-import Home from './Components/Home'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import Login from './Components/Login'
-import AccountCreation from './Components/AccountCreation'
-import Nav from './Components/Nav'
-import EventDisplay from './Components/EventDisplay'
-import EventSignUp from './Components/EventSignUp'
-import CreateEvent from './Components/CreateEvent'
-
+import './App.css';
+import Home from './Components/Home';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import Login from './Components/Login';
+import AccountCreation from './Components/AccountCreation';
+import Nav from './Components/Nav';
+import EventDisplay from './Components/EventDisplay';
+import EventSignUp from './Components/EventSignUp';
+import CreateEvent from './Components/CreateEvent';
+import PrivateRoute from './Components/PrivateRoute';
 
 function App() {
-
-  const [users, setUsers] = useState([])
 
   return (
     <BrowserRouter>
@@ -25,18 +22,18 @@ function App() {
           <Nav />
           <AccountCreation />
         </Route>
-        <Route id = 'event-display' path="/event-display">
+        <PrivateRoute id = 'event-display' path="/event-display">
           <Nav />
           <EventDisplay />
-        </Route>
-        <Route id = 'event-sign-up' path="/event-sign-up">
+        </PrivateRoute>
+        <PrivateRoute id = 'event-sign-up' path="/event-sign-up">
           <Nav />
           <EventSignUp />
-        </Route>
-        <Route id = 'create-event' path="/create-event">
+        </PrivateRoute>
+        <PrivateRoute id = 'create-event' path="/create-event">
           <Nav />
           <CreateEvent />
-        </Route>
+        </PrivateRoute>
         <Route id = 'home' path="/">
           <Nav />
           <Home />

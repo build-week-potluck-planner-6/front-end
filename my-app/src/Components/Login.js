@@ -3,51 +3,29 @@ import styled from "styled-components";
 import photo from "./Mingling.jpg";
 import { Link } from "react-router-dom";
 import axios from "axios";
+// import { useNavigate } from "react-router";
 
-const Login = (props) => {
-  const [formState, setFormState] = useState([
-    {
-      username: "",
-      password: "",
-    },
-  ]);
+const initialValues = { username: "", password: "" };
 
-  //   const [errorState, setErrorState] = useState([
-  //     {
-  //       username: "",
-  //       password: "",
-  //     },
-  //   ]);
+const Login = () => {
+  // const navigate = useNavigate();
+  const [formValues, setFormValues] = useState(initialValues);
+  const [error, setError] = useState(false);
 
-  const { userName, password, submit, change } = props;
+  const handleChanges = (e) => {
+    setFormValues({ ...formValues, [e.target.name]: e.target.value,
+    });
+  };
 
-  const onSubmit = (evt) => {
-    evt.preventDefault();
-    submit();
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
     axios
-      .post(`https://potluck-planner-4-backend-2.herokuapp.com/`, formState)
-      .then((res) => {
-        console.log("logging in", res.data);
-      });
-    setFormState(formState);
-  };
-
-  const validate = (e) => {
-    const userInput = {
-      ...formState,
-      [e.target.name]: e.target.value,
-    };
-  };
-
-  const onChange = (evt) => {
-    const { userName, password } = evt.target.value;
-    // change(userName, password);
-    validate(evt);
-    console.log("changing");
-
-    const setValue = evt.target.value;
-    setFormState({ ...formState, [evt.target.name]: setValue });
+        .post("http://localhost:3000/login", formValues)
+        .then((res) => {
+            window.localStorage.setItem('token', res.data.token);
+            // navigate("/event-display");
+        })
+        .catch(setError(true));
   };
 
   return (
@@ -56,16 +34,15 @@ const Login = (props) => {
         <LoginImg src={photo} alt="People attending an event" />
         <InfoDiv>
           <h1>Enter your Username and Password.</h1>
-          <form id="login-form" onSubmit={onSubmit}>
+          <form id="login-form" onSubmit={handleSubmit}>
             <label htmlFor="username">
               <h3>Username: </h3>
               <input
                 id="userName"
                 name="username"
                 type="text"
-                onChange={onChange}
-                value={formState.value}
-                //   value={userName}
+                onChange={handleChanges}
+                value={formValues.username}
               />
             </label>
             <label htmlFor="password">
@@ -74,20 +51,24 @@ const Login = (props) => {
                 id="password"
                 name="password"
                 type="text"
-                onChange={onChange}
-                value={formState.value}
-                //   value={password}
+                onChange={handleChanges}
+                value={formValues.password}
               />
             </label>
             <Link to={`event-display`}>
               <button id="login-button">Submit</button>
             </Link>
           </form>
+          {error && (
+                <p id ="error">Login Failed! Please try again!</p>
+            )}
         </InfoDiv>
       </LoginDiv>
     </>
   );
 };
+
+export default Login;
 
 const LoginDiv = styled.div`
   display: flex;
@@ -111,5 +92,3 @@ const InfoDiv = styled.div`
   justify-content: left;
   align-items: center;
 `;
-
-export default Login;
