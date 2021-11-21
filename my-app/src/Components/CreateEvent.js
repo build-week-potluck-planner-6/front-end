@@ -26,7 +26,7 @@ const CreateEvent = (props) => {
         potluck.id = Date.now();
         e.preventDefault();
         axiosWithAuth()
-        .post(`/potluck/${potluck.id}`, potluck)
+        .post(`https://potluckbuildweek.herokuapp.com/api/potlucks/${potluck.id}`, potluck)
         .then(res=> {
             console.log(res)
         })

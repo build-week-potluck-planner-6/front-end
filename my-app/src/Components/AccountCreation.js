@@ -13,7 +13,7 @@ const AccountCreation = (props) => {
     const onSubmit = e => {
         e.preventDefault()
         axios
-        .post("http://localhost:3000/login", formValues)
+        .post("https://potluckbuildweek.herokuapp.com/api/users", formValues)
         .then((res) => {
             window.localStorage.setItem('token', res.data.token);
             // navigate("/event-display");

@@ -34,7 +34,7 @@ const EditForm = (props)=> {
     const handleSubmit = (e) => {
         e.preventDefault();
         axiosWithAuth()
-        .put(`/event-display/${editId}`, potluck)
+        .put(`https://potluckbuildweek.herokuapp.com/api/potlucks/${editId}`, potluck)
         .then(res=> {
             console.log(res)
         })

@@ -8,13 +8,6 @@ import EditForm from './EditForm';
 
 const EventDisplay = () => {
 
-    //Sarah,
-    //There should be a way to display each event that has been created here, but I'm not entirely sure how to do this.
-    //Axios calls are the one thing I don't fully understand.
-    //I'll come back for this and try when I know the API to send/receive from. 
-    //For now, I'm just placing the page component and the options to create new event/sign up for one.
-    //-Matt
-
     // const { push } = useHistory();
     const [potlucks, setPotlucks] = useState([]);
     const [editing, setEditing] = useState(false);
@@ -22,7 +15,7 @@ const EventDisplay = () => {
 
     useEffect(() => {
         axiosWithAuth()
-        .get("/event-display")
+        .get("https://potluckbuildweek.herokuapp.com/api/potlucks")
         .then((res) => setPotlucks(res.data))
         .catch((err) => console.log(err))
     }, []);
@@ -35,7 +28,7 @@ const EventDisplay = () => {
 
     const handleDelete = (id) => {
         axiosWithAuth()
-            .delete(`/event-display/${id}`)
+            .delete(`https://potluckbuildweek.herokuapp.com/api/potlucks/${id}`)
             .then(res=> {
                 // push('/event-display')
             })
